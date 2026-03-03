@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+org.springframework.ide.eclipse.boot.wizard.PopularityTracker.cloud-eureka=7
 org.springframework.ide.eclipse.boot.wizard.PopularityTracker.cloud-feign=4
 org.springframework.ide.eclipse.boot.wizard.PopularityTracker.data-jpa=4
 org.springframework.ide.eclipse.boot.wizard.PopularityTracker.devtools=4

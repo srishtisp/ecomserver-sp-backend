@@ -1,0 +1,77 @@
+# ========================
+# API Gateway Configuration
+# ========================
+
+server:
+  port: 8060
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: false   # keep false
+
+      routes:
+
+        - id: customer-service
+          uri: lb://SPRINGCUSTOMER
+          predicates:
+            - Path=/customers/**
+          filters:
+            - RewritePath=/customer/(?<path>.*), /${path}
+
+        - id: payment-service
+          uri: lb://PAYMENTSERVICE
+          predicates:
+            - Path=/payment/**
+          filters:
+            - RewritePath=/payment/(?<path>.*), /${path}
+
+        - id: vendor-service
+          uri: lb://SPRINGVENDOR
+          predicates:
+            - Path=/vendor/**
+          filters:
+            - RewritePath=/vendor/(?<path>.*), /${path}
+
+        - id: order-service
+          uri: lb://ORDERSERVICE
+          predicates:
+            - Path=/order/**
+          filters:
+            - RewritePath=/order/(?<path>.*), /${path}
+
+        - id: cart-service
+          uri: lb://CARTSERVICE
+          predicates:
+            - Path=/cart/**
+          filters:
+            - RewritePath=/cart/(?<path>.*), /${path}
+
+        - id: product-service
+          uri: lb://PRODUCTSERVICE
+          predicates:
+            - Path=/product/**
+          filters:
+            - RewritePath=/product/(?<path>.*), /${path}
+
+        # ✅ SECURITY SERVICE (NO REWRITE - CLEAN)
+        - id: security-service
+          uri: lb://SPRINGSECURITYSERVICE
+          predicates:
+            - Path=/auth/**
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8061/eureka/
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG

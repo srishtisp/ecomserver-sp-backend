@@ -1,0 +1,78 @@
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.file.*;
+
+@Service
+@RequiredArgsConstructor
+public class ProductService {
+
+  private final ProductRepository productRepo;
+
+  // ✅ set in application.yml
+  @Value("${app.upload.dir:uploads}")
+  private String uploadDir;
+
+  public void saveImageToFolder(Long productId, MultipartFile file) throws Exception {
+
+    if (file.isEmpty()) throw new RuntimeException("File is empty");
+
+    String contentType = file.getContentType();
+    if (contentType == null || !contentType.startsWith("image/")) {
+      throw new RuntimeException("Only image files allowed");
+    }
+
+    Product p = productRepo.findById(productId)
+        .orElseThrow(() -> new RuntimeException("Product not found: " + productId));
+
+    // ✅ Create folder if not exists
+    Path dir = Paths.get(uploadDir).toAbsolutePath().normalize();
+    Files.createDirectories(dir);
+
+    // ✅ safe filename: productId + extension
+    String ext = switch (contentType) {
+      case "image/png" -> "png";
+      case "image/jpeg" -> "jpg";
+      case "image/webp" -> "webp";
+      default -> "img";
+    };
+
+    String filename = "product-" + productId + "." + ext;
+    Path target = dir.resolve(filename);
+
+    // ✅ save/overwrite
+    Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
+
+    // ✅ store path in DB
+    p.setImagePath(target.toString());
+    p.setImageType(contentType);
+    productRepo.save(p);
+  }
+
+  public ResponseEntity<byte[]> getImageBytes(Long productId) throws Exception {
+    Product p = productRepo.findById(productId)
+        .orElseThrow(() -> new RuntimeException("Product not found: " + productId));
+
+    if (p.getImagePath() == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    Path path = Paths.get(p.getImagePath());
+    if (!Files.exists(path)) {
+      return ResponseEntity.notFound().build();
+    }
+
+    byte[] bytes = Files.readAllBytes(path);
+
+    MediaType type = (p.getImageType() != null)
+        ? MediaType.parseMediaType(p.getImageType())
+        : MediaType.APPLICATION_OCTET_STREAM;
+
+    return ResponseEntity.ok()
+        .contentType(type)
+        .body(bytes);
+  }
+}

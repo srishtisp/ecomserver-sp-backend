@@ -2,6 +2,7 @@
 <section name="Workbench">
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="C:\Users\harsha.s1\Downloads\Microservices-main\Microservices-main"/>
 			<item value="C:\Users\harsha.s1\Desktop\ecomserver\AuthServices"/>
 		</list>
 		<list key="projectNameTemplate">

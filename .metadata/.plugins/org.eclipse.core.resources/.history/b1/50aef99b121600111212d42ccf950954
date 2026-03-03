@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: SpringSecurityService
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ECom
+    username: postgres
+    password: slk@SOFT123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  cloud:
+    config:
+      enabled: false
+
+server:
+  port: 9999

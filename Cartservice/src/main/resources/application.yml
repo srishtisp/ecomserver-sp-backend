@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: Cartservice
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ECom_Cart
+    username: postgres
+    password: slk@SOFT123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  cloud:
+    config:
+      enabled: false
+
+server:
+  port: 8085
+
+services:
+  security: http://localhost:9999
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8061/eureka/

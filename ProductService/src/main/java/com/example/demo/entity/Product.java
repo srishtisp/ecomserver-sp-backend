@@ -33,4 +33,10 @@ public class Product {
 
     @Column(nullable=false)
     private boolean active = true;
+ // Product entity
+    @Column(name = "image_path")
+    private String imagePath;
+
+    @Column(name = "image_type")
+    private String imageType; // image/png, image/jpeg
 }

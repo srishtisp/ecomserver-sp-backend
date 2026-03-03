@@ -1,0 +1,73 @@
+server:
+  port: 8060
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: false
+
+      routes:
+
+        # ================= CUSTOMER =================
+        - id: customer-service
+          uri: lb://SPRINGCUSTOMER
+          predicates:
+            - Path=/customers/**
+
+        # ================= AUTH =================
+        - id: security-service
+          uri: lb://SPRINGSECURITYSERVICE
+          predicates:
+            - Path=/auth/**
+
+        # ================= PAYMENT =================
+        - id: payment-service
+          uri: lb://PAYMENTSERVICE
+          predicates:
+            - Path=/payment/**
+          filters:
+            - RewritePath=/payment/(?<path>.*), /${path}
+
+        # ================= ORDER =================
+        - id: order-service
+          uri: lb://ORDERSERVICE
+          predicates:
+            - Path=/order/**
+          filters:
+            - RewritePath=/order/(?<path>.*), /${path}
+
+        # ================= CART =================
+        - id: cart-service
+          uri: lb://CARTSERVICE
+          predicates:
+            - Path=/cart/**
+          filters:
+            - RewritePath=/cart/(?<path>.*), /${path}
+
+        # ================= PRODUCT =================
+        - id: product-service
+          uri: lb://PRODUCTSERVICE
+          predicates:
+            - Path=/products/**
+          filters:
+            - RewritePath=/products/(?<path>.*), /${path}
+
+        # ================= VENDOR =================
+        - id: vendor-service
+          uri: lb://SPRINGVENDOR
+          predicates:
+            - Path=/vendor/**
+          filters:
+            - RewritePath=/vendor/(?<path>.*), /${path}
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8061/eureka/

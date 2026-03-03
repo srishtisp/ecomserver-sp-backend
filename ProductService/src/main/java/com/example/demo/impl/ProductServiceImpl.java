@@ -1,6 +1,7 @@
 package com.example.demo.impl;
 
 import com.example.demo.dto.*;
+
 import com.example.demo.entity.Product;
 import com.example.demo.repo.ProductRepo;
 import com.example.demo.service.ProductService;
@@ -9,11 +10,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class ProductServiceImpl implements ProductService {
+	@Value("${app.upload.dir:uploads}")
+	private String uploadDir;
 
     private final ProductRepo repo;
 
@@ -128,5 +139,70 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new RuntimeException("Product not found: " + id));
         p.setActive(active);
         repo.save(p);
+    }
+    @Override
+    public void saveImageToFolder(Long productId, MultipartFile file) throws Exception {
+
+        if (file == null || file.isEmpty()) {
+            throw new RuntimeException("File is empty");
+        }
+
+        String contentType = file.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new RuntimeException("Only image files allowed");
+        }
+
+        Product p = repo.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found: " + productId));
+
+        // ✅ create uploads folder
+        Path dir = Paths.get(uploadDir).toAbsolutePath().normalize();
+        Files.createDirectories(dir);
+
+        // ✅ file extension
+        String ext = switch (contentType) {
+            case "image/png" -> "png";
+            case "image/jpeg" -> "jpg";
+            case "image/webp" -> "webp";
+            default -> "img";
+        };
+
+        String filename = "product-" + productId + "." + ext;
+        Path target = dir.resolve(filename);
+
+        Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
+
+        // ✅ save path + type in DB
+        p.setImagePath(target.toString());
+        p.setImageType(contentType);
+        repo.save(p);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ResponseEntity<byte[]> getImageBytes(Long productId) throws Exception {
+
+        Product p = repo.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found: " + productId));
+
+        if (p.getImagePath() == null || p.getImagePath().isBlank()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Path path = Paths.get(p.getImagePath());
+
+        if (!Files.exists(path)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        byte[] bytes = Files.readAllBytes(path);
+
+        MediaType type = (p.getImageType() != null && !p.getImageType().isBlank())
+                ? MediaType.parseMediaType(p.getImageType())
+                : MediaType.APPLICATION_OCTET_STREAM;
+
+        return ResponseEntity.ok()
+                .contentType(type)
+                .body(bytes);
     }
 }

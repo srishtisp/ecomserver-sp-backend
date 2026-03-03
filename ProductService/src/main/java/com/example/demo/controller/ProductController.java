@@ -3,9 +3,15 @@ package com.example.demo.controller;
 import com.example.demo.dto.*;
 import com.example.demo.service.ProductService;
 import jakarta.validation.Valid;
+//import jakarta.ws.rs.core.MediaType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.http.MediaType; 
+//import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
@@ -68,6 +74,17 @@ public class ProductController {
     public String toggle(@PathVariable Long id, @RequestParam boolean active) {
         productService.toggleStatus(id, active);
         return "Product status updated: productId=" + id + ", active=" + active;
+    }
+    @PostMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> uploadImage(@PathVariable Long id,
+                                              @RequestPart("file") MultipartFile file) throws Exception {
+        productService.saveImageToFolder(id, file);
+        return ResponseEntity.ok("Image uploaded for productId=" + id);
+    }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<byte[]> getImage(@PathVariable Long id) throws Exception {
+        return productService.getImageBytes(id);
     }
     
 }

@@ -1,0 +1,98 @@
+# ========================
+# Gateway Configuration
+# ========================
+
+server:
+  port: 8060
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8061/eureka/
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: helloworld-service
+          uri: lb://helloworld-service
+          predicates:
+            - Path=/helloworld/**
+          filters:
+            - RewritePath=/helloworld/(?<path>.*), /${path}
+
+        - id: helloworld2-service
+          uri: lb://helloworld2-service
+          predicates:
+            - Path=/helloworld2/**
+          filters:
+            - RewritePath=/helloworld2/(?<path>.*), /${path}
+
+        - id: FSD
+          uri: lb://FSD
+          predicates:
+            - Path=/entry/**
+          filters:
+            - RewritePath=/entry/(?<path>.*), /${path}
+
+        - id: customer-service
+          uri: lb://SpringCustomer
+          predicates:
+            - Path=/customer/**
+          filters:
+            - RewritePath=/customer/(?<path>.*), /${path}
+
+        - id: payment-service
+          uri: lb://PaymentService
+          predicates:
+            - Path=/payment/**
+          filters:
+            - RewritePath=/payment/(?<path>.*), /${path}
+
+        - id: vendor-service
+          uri: lb://SpringVendor
+          predicates:
+            - Path=/vendor/**
+          filters:
+            - RewritePath=/vendor/(?<path>.*), /${path}
+
+        - id: order-service
+          uri: lb://OrderService
+          predicates:
+            - Path=/order/**
+          filters:
+            - RewritePath=/order/(?<path>.*), /${path}
+
+        - id: cart-service
+          uri: lb://Cartservice
+          predicates:
+            - Path=/cart/**
+          filters:
+            - RewritePath=/cart/(?<path>.*), /${path}
+
+        - id: product-service
+          uri: lb://ProductService
+          predicates:
+            - Path=/product/**
+          filters:
+            - RewritePath=/product/(?<path>.*), /${path}
+
+        - id: security-service
+          uri: lb://SpringSecurityService
+          predicates:
+            - Path=/security/**
+          filters:
+            - RewritePath=/auth/(?<path>.*), /${path}
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: helloworld
+        url: /v3/api-docs/helloworld
