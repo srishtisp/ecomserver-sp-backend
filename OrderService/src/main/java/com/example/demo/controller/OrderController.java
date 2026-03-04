@@ -51,4 +51,11 @@ public class OrderController {
         orderService.internalMarkPaid(orderId);
         return "OK";
     }
+    @PutMapping("/cancel/{orderId}")
+    public String cancel(Authentication auth, @PathVariable Long orderId) {
+
+        orderService.cancelOrder(auth.getName(), orderId);
+
+        return "Order cancelled";
+    }
 }

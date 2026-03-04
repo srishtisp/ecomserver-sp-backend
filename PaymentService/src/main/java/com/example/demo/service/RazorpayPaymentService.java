@@ -1,0 +1,15 @@
+package com.example.demo.service;
+
+import com.example.demo.dto.PaymentResponse;
+import com.example.demo.dto.RazorpayCreateResponse;
+import com.example.demo.dto.RazorpayVerifyRequest;
+
+public interface RazorpayPaymentService {
+	 RazorpayCreateResponse createRazorpayOrder(String username,
+             String authorizationHeader,
+             Long orderId) throws Exception;
+
+PaymentResponse verifyAndPay(String username,
+String authorizationHeader,
+RazorpayVerifyRequest req);
+}

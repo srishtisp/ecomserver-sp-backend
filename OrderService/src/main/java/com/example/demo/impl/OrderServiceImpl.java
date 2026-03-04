@@ -133,6 +133,31 @@ public class OrderServiceImpl implements OrderService {
         Order o = orderRepo.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
         o.setPaid(true);
+        o.setOrderStatus(OrderStatus.SHIPPED);
         orderRepo.save(o);
+    }
+    @Override
+    public void cancelOrder(String username, Long orderId) {
+
+        Long userId = resolveUserId(username);
+
+        Order order = orderRepo.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        if (!order.getUserId().equals(userId)) {
+            throw new RuntimeException("This order does not belong to you");
+        }
+
+        if (order.isPaid()) {
+            throw new RuntimeException("Paid orders cannot be cancelled");
+        }
+
+        if (order.getOrderStatus() == OrderStatus.SHIPPED) {
+            throw new RuntimeException("Order already shipped");
+        }
+
+        order.setOrderStatus(OrderStatus.CANCELLED);
+
+        orderRepo.save(order);
     }
 }

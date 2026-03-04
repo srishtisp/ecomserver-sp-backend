@@ -2,7 +2,11 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.PayRequest;
 import com.example.demo.dto.PaymentResponse;
+import com.example.demo.dto.RazorpayCreateResponse;
+import com.example.demo.dto.RazorpayVerifyRequest;
 import com.example.demo.service.PaymentService;
+import com.example.demo.service.RazorpayPaymentService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class PaymentController {
 
     private final PaymentService paymentService;
+    private final RazorpayPaymentService razorpayPaymentService;
 
     // customer story: /pay
     @PostMapping("/pay")
@@ -42,5 +47,20 @@ public class PaymentController {
     public PaymentResponse refund(Authentication auth,
                                   @PathVariable Long orderId) {
         return paymentService.refund(auth.getName(), orderId);
+    }
+    @PostMapping("/razorpay/create")
+    public RazorpayCreateResponse create(Authentication auth,
+                                         @RequestHeader(name="Authorization", required=false) String authorization,
+                                         @RequestParam Long orderId) throws Exception {
+
+        return razorpayPaymentService.createRazorpayOrder(auth.getName(), authorization, orderId);
+    }
+
+    @PostMapping("/razorpay/verify")
+    public PaymentResponse verify(Authentication auth,
+                                  @RequestHeader(name="Authorization", required=false) String authorization,
+                                  @Valid @RequestBody RazorpayVerifyRequest req) {
+
+        return razorpayPaymentService.verifyAndPay(auth.getName(), authorization, req);
     }
 }

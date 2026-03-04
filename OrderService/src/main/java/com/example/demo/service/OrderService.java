@@ -15,4 +15,5 @@ public interface OrderService {
     // internal (for payment-service later)
     InternalOrderDTO internalGet(Long orderId);
     void internalMarkPaid(Long orderId);
+    void cancelOrder(String username, Long orderId);
 }

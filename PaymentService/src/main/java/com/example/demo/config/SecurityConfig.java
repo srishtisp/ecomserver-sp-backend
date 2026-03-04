@@ -23,7 +23,7 @@ public class SecurityConfig {
         http.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests(auth -> auth
-//                .requestMatchers("/orders/internal/**").permitAll() // internal for payment-service later
+                .requestMatchers("/orders/internal/**").permitAll() // internal for payment-service later
                 .anyRequest().hasRole("CUSTOMER")                  // customer only
         );
 

@@ -21,9 +21,12 @@ server:
 
 services:
   security: http://localhost:9999
-  order: http://localhost:8086
+  order: http://localhost:8060
 
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8061/eureka/
+razorpay:
+  keyId: rzp_test_SMoFjsYTgnbVXO
+  keySecret: SE1uiNimaXsutaXh60syqOXv
