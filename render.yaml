@@ -1,91 +1,91 @@
 services:
 
-# ---------------- DISCOVERY ----------------
-  - type: web
-    name: discovery-service
-    runtime: java
-    rootDir: discovery-service
-    buildCommand: ./mvnw clean install
-    startCommand: java -jar target/discovery-service.jar
-    plan: free
+# DISCOVERY
+- type: web
+  name: discovery-service
+  env: java
+  plan: free
+  rootDir: discovery-service
+  buildCommand: ./mvnw clean package
+  startCommand: java -jar target/discovery-service.jar
 
-# ---------------- CONFIG ----------------
-  - type: web
-    name: config-service
-    runtime: java
-    rootDir: Config-service
-    buildCommand: ./mvnw clean install
-    startCommand: java -jar target/config-service.jar
-    plan: free
+# CONFIG
+- type: web
+  name: config-service
+  env: java
+  plan: free
+  rootDir: Config-service
+  buildCommand: ./mvnw clean package
+  startCommand: java -jar target/config-service.jar
 
-# ---------------- GATEWAY ----------------
-  - type: web
-    name: gateway-service
-    runtime: java
-    rootDir: gateway-service
-    buildCommand: ./mvnw clean install
-    startCommand: java -jar target/gateway-service.jar
-    plan: free
+# GATEWAY
+- type: web
+  name: gateway-service
+  env: java
+  plan: free
+  rootDir: gateway-service
+  buildCommand: ./mvnw clean package
+  startCommand: java -jar target/gateway-service.jar
 
-# ---------------- PRODUCT ----------------
-  - type: web
-    name: product-service
-    runtime: java
-    rootDir: ProductService
-    buildCommand: ./mvnw clean install
-    startCommand: java -jar target/ProductService.jar
-    plan: free
+# PRODUCT
+- type: web
+  name: product-service
+  env: java
+  plan: free
+  rootDir: ProductService
+  buildCommand: ./mvnw clean package
+  startCommand: java -jar target/ProductService.jar
 
-# ---------------- CART ----------------
-  - type: web
-    name: cart-service
-    runtime: java
-    rootDir: Cartservice
-    buildCommand: ./mvnw clean install
-    startCommand: java -jar target/Cartservice.jar
-    plan: free
+# CART
+- type: web
+  name: cart-service
+  env: java
+  plan: free
+  rootDir: Cartservice
+  buildCommand: ./mvnw clean package
+  startCommand: java -jar target/Cartservice.jar
 
-# ---------------- ORDER ----------------
-  - type: web
-    name: order-service
-    runtime: java
-    rootDir: OrderService
-    buildCommand: ./mvnw clean install
-    startCommand: java -jar target/OrderService.jar
-    plan: free
+# ORDER
+- type: web
+  name: order-service
+  env: java
+  plan: free
+  rootDir: OrderService
+  buildCommand: ./mvnw clean package
+  startCommand: java -jar target/OrderService.jar
 
-# ---------------- PAYMENT ----------------
-  - type: web
-    name: payment-service
-    runtime: java
-    rootDir: PaymentService
-    buildCommand: ./mvnw clean install
-    startCommand: java -jar target/PaymentService.jar
-    plan: free
+# PAYMENT
+- type: web
+  name: payment-service
+  env: java
+  plan: free
+  rootDir: PaymentService
+  buildCommand: ./mvnw clean package
+  startCommand: java -jar target/PaymentService.jar
 
-# ---------------- AUTH SECURITY ----------------
-  - type: web
-    name: security-service
-    runtime: java
-    rootDir: AuthServices/springsecurityservice
-    buildCommand: ./mvnw clean install
-    startCommand: java -jar target/springsecurityservice.jar
-    plan: free
+# SECURITY AUTH
+- type: web
+  name: security-service
+  env: java
+  plan: free
+  rootDir: AuthServices/springsecurityservice
+  buildCommand: ./mvnw clean package
+  startCommand: java -jar target/springsecurityservice.jar
 
-# ---------------- CUSTOMER AUTH ----------------
-  - type: web
-    name: customer-auth-service
-    runtime: java
-    rootDir: AuthServices/springcustomer
-    buildCommand: ./mvnw clean install
-    startCommand: java -jar target/springcustomer.jar
-    plan: free
+# CUSTOMER AUTH
+- type: web
+  name: customer-auth-service
+  env: java
+  plan: free
+  rootDir: AuthServices/springcustomer
+  buildCommand: ./mvnw clean package
+  startCommand: java -jar target/springcustomer.jar
 
-# ---------------- VENDOR AUTH ----------------
-  - type: web
-    name: vendor-auth-service
-    runtime: java
-    rootDir: AuthServices/springvendor
-    buildCommand: ./mvnw clean install
-    startCommand: java -jar target/springvendor.jar
-    plan: free
+# VENDOR AUTH
+- type: web
+  name: vendor-auth-service
+  env: java
+  plan: free
+  rootDir: AuthServices/springvendor
+  buildCommand: ./mvnw clean package
+  startCommand: java -jar target/springvendor.jar
