@@ -16,4 +16,6 @@ public interface OrderService {
     InternalOrderDTO internalGet(Long orderId);
     void internalMarkPaid(Long orderId);
     void cancelOrder(String username, Long orderId);
+    List<OrderResponse> getAllOrders();
+    boolean hasUserPurchasedProduct(Long userId, Long productId);
 }

@@ -22,13 +22,23 @@ public class SecurityConfig {
     http.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
     http.authorizeHttpRequests(auth -> auth
-        .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
-        .requestMatchers(HttpMethod.POST, "/products/**").hasAnyRole("VENDOR","ADMIN")
-        .requestMatchers(HttpMethod.PUT, "/products/**").hasAnyRole("VENDOR","ADMIN")
-        .requestMatchers(HttpMethod.DELETE, "/products/**").hasAnyRole("VENDOR","ADMIN")
-        .requestMatchers(HttpMethod.PATCH, "/products/**").hasAnyRole("VENDOR","ADMIN")
-        .anyRequest().authenticated()
-    );
+
+    	    // public browsing
+    	    .requestMatchers(HttpMethod.GET, "/products/view/**").permitAll()
+    	    .requestMatchers(HttpMethod.GET, "/products/view").permitAll()
+
+    	    // admin actions
+    	    .requestMatchers(HttpMethod.PUT, "/products/approve/**").hasRole("ADMIN")
+    	    .requestMatchers(HttpMethod.PUT, "/products/disapprove/**").hasRole("ADMIN")
+
+    	    // vendor/admin product management
+    	    .requestMatchers(HttpMethod.POST, "/products/**").hasAnyRole("VENDOR","ADMIN")
+    	    .requestMatchers(HttpMethod.PUT, "/products/**").hasAnyRole("VENDOR","ADMIN")
+    	    .requestMatchers(HttpMethod.DELETE, "/products/**").hasAnyRole("VENDOR","ADMIN")
+    	    .requestMatchers(HttpMethod.PATCH, "/products/**").hasAnyRole("VENDOR","ADMIN")
+
+    	    .anyRequest().authenticated()
+    	);
 
     http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     return http.build();

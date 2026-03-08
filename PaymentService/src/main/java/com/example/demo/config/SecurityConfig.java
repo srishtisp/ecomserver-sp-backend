@@ -24,7 +24,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/orders/internal/**").permitAll() // internal for payment-service later
-                .anyRequest().hasRole("CUSTOMER")                  // customer only
+                .anyRequest().hasAnyRole("CUSTOMER","ADMIN")               // customer only
         );
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

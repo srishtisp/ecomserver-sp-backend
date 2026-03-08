@@ -11,4 +11,5 @@ public interface PaymentService {
     List<PaymentResponse> myPayments(String username);
     PaymentResponse retry(String username, Long paymentId);
     PaymentResponse refund(String username, Long orderId);
+    List<PaymentResponse> getAllPayments();
 }

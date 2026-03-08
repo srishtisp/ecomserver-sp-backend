@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: ReviewService
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ECom
+    username: postgres
+    password: slk@SOFT123
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 8081
+
+services:
+  auth: http://localhost:9999
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8061/eureka/

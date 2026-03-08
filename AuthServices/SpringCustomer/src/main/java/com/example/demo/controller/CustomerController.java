@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +47,10 @@ public class CustomerController {
     @DeleteMapping("/{id}")
     public void deleteCustomer(@PathVariable Integer id) {
         customerService.deleteCustomerById(id);
+    }
+    
+    @GetMapping("/admin")
+    public List<Customer> getAllCustomers() {
+        return customerService.getAllCustomers();
     }
 }

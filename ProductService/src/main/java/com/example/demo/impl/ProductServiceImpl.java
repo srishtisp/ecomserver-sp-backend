@@ -1,5 +1,6 @@
 package com.example.demo.impl;
 
+import com.example.demo.client.ReviewClient;
 import com.example.demo.dto.*;
 
 import com.example.demo.entity.Product;
@@ -27,10 +28,12 @@ public class ProductServiceImpl implements ProductService {
 	private String uploadDir;
 
     private final ProductRepo repo;
+    private final ReviewClient reviewClient;
 
     // ---- mapping helpers ----
     private ProductResponse toResponse(Product p) {
-        return ProductResponse.builder()
+
+        ProductResponse response = ProductResponse.builder()
                 .productId(p.getProductId())
                 .productName(p.getProductName())
                 .description(p.getDescription())
@@ -40,6 +43,23 @@ public class ProductServiceImpl implements ProductService {
                 .category(p.getCategory())
                 .active(p.isActive())
                 .build();
+
+        try {
+            ReviewResponse reviewData = reviewClient.getReviews(p.getProductId());
+
+            if (reviewData != null) {
+                response.setReviews(reviewData.getReviews());
+                response.setAverageRating(reviewData.getAverageRating());
+                response.setReviewCount(reviewData.getReviews().size());
+            }
+
+        } catch (Exception e) {
+            response.setReviews(List.of());
+            response.setAverageRating(0.0);
+            response.setReviewCount(0);
+        }
+
+        return response;
     }
 
     private ProductInternalDTO toInternal(Product p) {
@@ -80,8 +100,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public ProductResponse getById(Long id) {
+
         Product p = repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found: " + id));
+
         return toResponse(p);
     }
 

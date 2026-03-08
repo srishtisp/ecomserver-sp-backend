@@ -58,4 +58,17 @@ public class OrderController {
 
         return "Order cancelled";
     }
+    
+    @GetMapping("/admin")
+    public List<OrderResponse> getAllOrders() {
+        return orderService.getAllOrders();
+    }
+    
+    @GetMapping("/internal/purchased")
+    public boolean hasPurchased(
+            @RequestParam Long userId,
+            @RequestParam Long productId) {
+
+        return orderService.hasUserPurchasedProduct(userId, productId);
+    }
 }

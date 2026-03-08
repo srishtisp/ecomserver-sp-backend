@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Vendor;
 import com.example.demo.services.VendorService;
-
-
-
 
 //	@CrossOrigin("http://localhost:4200")
 	@RestController
@@ -61,5 +59,9 @@ import com.example.demo.services.VendorService;
 	    @GetMapping("/{id}")
 	    public Vendor getById(@PathVariable Integer id) {
 	        return vendorService.getVendorById(id);
+	    }
+	    @GetMapping("/admin")
+	    public List<Vendor> getAllVendors() {
+	        return vendorService.getAllVendors();
 	    }
 	}

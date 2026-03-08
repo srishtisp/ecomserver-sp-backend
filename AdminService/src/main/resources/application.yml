@@ -1,0 +1,18 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: AdminService
+  cloud:
+    config:
+      enabled: false
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8061/eureka
+
+logging:
+  level:
+    org.springframework.cloud.openfeign: DEBUG

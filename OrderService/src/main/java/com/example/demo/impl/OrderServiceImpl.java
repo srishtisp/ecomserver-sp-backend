@@ -160,4 +160,18 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepo.save(order);
     }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<OrderResponse> getAllOrders() {
+        return orderRepo.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public boolean hasUserPurchasedProduct(Long userId, Long productId) {
+        return orderRepo.existsByUserIdAndProductIdAndPaidTrue(userId, productId);
+    }
 }

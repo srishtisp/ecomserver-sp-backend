@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.example.demo.model.Vendor;
@@ -14,5 +15,5 @@ public interface VendorService {
 	Vendor updateCategory(Integer id,String category);
 	void deleteVendorById(Integer id);
 	Vendor getVendorById(Integer id);
-	
+	List<Vendor> getAllVendors();
 }

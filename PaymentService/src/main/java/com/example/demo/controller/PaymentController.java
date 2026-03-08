@@ -63,4 +63,10 @@ public class PaymentController {
 
         return razorpayPaymentService.verifyAndPay(auth.getName(), authorization, req);
     }
-}
+    
+    @GetMapping("/admin")
+    public List<PaymentResponse> allPayments() {
+        return paymentService.getAllPayments();
+    }
+    
+  }

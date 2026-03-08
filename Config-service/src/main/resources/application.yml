@@ -1,5 +1,15 @@
 server:
   port: 8089
+
 spring:
+  application:
+    name: config-server
+
   profiles:
     active: native
+
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/config

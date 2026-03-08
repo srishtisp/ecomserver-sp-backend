@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,5 +72,10 @@ public class VendorServiceImpl implements VendorService{
     public Vendor getVendorById(Integer id){
         return vendorRepo.findById(id)
             .orElseThrow(() -> new RuntimeException("Vendor not found"));
+    }
+    
+    @Override
+    public List<Vendor> getAllVendors() {
+        return vendorRepo.findAll();
     }
 }

@@ -57,6 +57,17 @@ spring:
           uri: lb://SPRINGVENDOR
           predicates:
             - Path=/vendors/**
+
+        # ================= ADMIN =================
+        - id: admin-service
+          uri: lb://ADMINSERVICE
+          predicates:
+            - Path=/admin/**
+        # ================= REVIEW =================
+        - id: review-service
+          uri: lb://REVIEWSERVICE
+          predicates:
+            - Path=/reviews/**
           
 
 eureka:

@@ -3,6 +3,7 @@ package com.example.demo.dto;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,4 +22,8 @@ public class ProductResponse {
     private String category;
 
     private boolean active;
+    
+    private Double averageRating;
+    private Integer reviewCount;
+    private List<ReviewDto> reviews;
 }

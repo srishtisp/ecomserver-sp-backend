@@ -173,4 +173,14 @@ public class PaymentServiceImpl implements PaymentService {
 
         return toResponse(paymentRepo.save(refund));
     }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<PaymentResponse> getAllPayments() {
+
+        return paymentRepo.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
 }

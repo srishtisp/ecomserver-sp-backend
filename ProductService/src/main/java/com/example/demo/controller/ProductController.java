@@ -87,4 +87,24 @@ public class ProductController {
         return productService.getImageBytes(id);
     }
     
+ // Admin approve product
+    @PutMapping("/approve/{id}")
+    public ResponseEntity<String> approveProduct(@PathVariable Long id) {
+        productService.toggleStatus(id, true);
+        return ResponseEntity.ok("Product approved: " + id);
+    }
+
+    // Admin disapprove product
+    @PutMapping("/disapprove/{id}")
+    public ResponseEntity<String> disapproveProduct(@PathVariable Long id) {
+        productService.toggleStatus(id, false);
+        return ResponseEntity.ok("Product disapproved: " + id);
+    }
+
+    // Admin view all products (including inactive)
+    @GetMapping("/admin")
+    public List<ProductResponse> getAllForAdmin() {
+        return productService.viewAll();
+    }
+    
 }
